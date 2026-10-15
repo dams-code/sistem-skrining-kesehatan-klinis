@@ -1,0 +1,31 @@
+from sqlalchemy.orm import relationship, Mapped, mapped_column
+from sqlalchemy import String, func, ForeignKey, DateTime
+from core.database import Base
+
+from typing import Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.spesialis import Spesialis
+    from models.user import User
+
+class Paramedis(Base):
+    __tablename__ = "paramedis"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+
+    no_str: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
+    no_sip: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
+
+    spesialis_id: Mapped[int] = mapped_column(ForeignKey("spesialis.id"))
+    spesialis_ref: Mapped["Spesialis"] = relationship("Spesialis", back_populates="paramedis_ref", lazy="selectin")
+
+    @property
+    def nama(self) -> str | None:
+        return self.spesialis_ref.nama if self.spesialis_ref else None
+
+    user_ref: Mapped["User"] = relationship("User", back_populates="paramedis_ref")
+
+    created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
+    created_by: Mapped[str] = mapped_column(String(50))
+    modified_at: Mapped[Optional[DateTime]] = mapped_column(DateTime, onupdate=func.now(), nullable=True)
+    modified_by: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
