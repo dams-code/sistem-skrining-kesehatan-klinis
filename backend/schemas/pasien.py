@@ -1,7 +1,9 @@
+from psycopg.errors import IdleInTransactionSessionTimeout
 from pydantic import BaseModel, ConfigDict
-
+from typing import Generic, TypeVar, Optional
 from datetime import datetime
 
+T = TypeVar("T")
 class PasienResponse(BaseModel):
     id: int
     rm: int
@@ -31,11 +33,14 @@ class PasienCreate(BaseModel):
     status: bool = True
 
 class PasienUpdate(BaseModel):
-    nama_depan: str | None=None
-    nama_belakang: str | None=None
-    jenis_kelamin: str | None=None
-    golongan_darah: str | None=None
-    alamat: str | None=None
-    no_telp: str | None=None
+    nama_depan: str | None
+    nama_belakang: str | None
+    jenis_kelamin: str | None
+    golongan_darah: str | None
+    alamat: str | None
+    no_telp: str | None
 
-
+class ResultPasien(BaseModel, Generic[T]):
+    status: int
+    pesan: str
+    data: Optional[T] = None
