@@ -2,10 +2,12 @@ from sqlalchemy import String, Integer, ForeignKey, DateTime, func, Enum as sqlE
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 from core.database import Base
 from enum import Enum
-from models.pasien import Pasien
-from models.user import User
-from models.klinis import Klinis
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.pasien import Pasien
+    from models.user import User
+    from models.klinis import Klinis
 
 class StatusAdmisi(str, Enum):
     TERDAFTAR = "terdaftar"

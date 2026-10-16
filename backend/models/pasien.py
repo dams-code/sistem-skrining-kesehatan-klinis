@@ -3,10 +3,7 @@ from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import String, Boolean, Integer, DateTime, func, Enum as sqlEnum
 from core.database import Base
 from enum import Enum
-from typing import TYPE_CHECKING,Optional
-
-if TYPE_CHECKING:
-    from models.admisi import Admisi
+from typing import Optional
 
 class GolonganDarah(str, Enum):
     A = "A"
@@ -35,5 +32,8 @@ class Pasien(Base):
 
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
     created_by: Mapped[str] = mapped_column(String(50))
-    modify_at: Mapped[Optional[DateTime]] = mapped_column(DateTime, onupdate=func.now(), nullable=True)
-    modify_by: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    modified_at: Mapped[Optional[DateTime]] = mapped_column(DateTime, onupdate=func.now(), nullable=True)
+    modified_by: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+
+
+from models.admisi import Admisi

@@ -17,12 +17,9 @@ class Klinis(Base):
 
     data: Mapped[Dict[str, Any]] = mapped_column(JSONB, nullable=False)
 
-    admisi_ref: Mapped["Admisi"] = relationship('Admisi', back_populates="klinis_ref", lazy="selectin")
+    admisi_ref: Mapped["Admisi"] = relationship("Admisi", back_populates="klinis_ref", lazy="selectin")
 
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
     created_by: Mapped[str] = mapped_column(String(50))
     modified_at: Mapped[Optional[DateTime]] = mapped_column(DateTime, onupdate=func.now(), nullable=True)
     modified_by: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
-
-
-

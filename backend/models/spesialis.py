@@ -1,8 +1,10 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, func, DateTime
 from core.database import Base
-from models.paramedis import Paramedis
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.paramedis import Paramedis
 
 class Spesialis(Base):
     __tablename__ = "spesialis"

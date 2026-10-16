@@ -1,10 +1,12 @@
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy import String, DateTime, func, Enum as sqlEnum
 from core.database import Base
-from models.user import User
 
 from enum import Enum
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.user import User
 
 class NamaJabatan(str, Enum):
     DOKTER_SPESIALIS = "Dokter Spesialis"
@@ -22,9 +24,6 @@ class Jabatan(Base):
     nama_jabatan: Mapped[NamaJabatan] = mapped_column(sqlEnum(NamaJabatan), nullable=False, index=True)
 
     kategori: Mapped[str] = mapped_column(String(20), default="NON_MEDIS")
-    prefix: Mapped[Optional[str]] = mapped_column(String(10), nullable=False)
-    suffix: Mapped[Optional[str]] = mapped_column(String(30), nullable=False)
-
     user_ref: Mapped["User"] = relationship("User", back_populates="jabatan_ref")
 
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
