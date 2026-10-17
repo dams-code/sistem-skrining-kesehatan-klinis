@@ -17,6 +17,8 @@ class ParamedisResponse(BaseModel):
     modified_at: datetime | None
     modified_by: str | None
 
+    model_config = ConfigDict(from_attributes=True)
+
 class ParamedisCreate(BaseModel):
     no_str: str
     no_sip: str

@@ -1,11 +1,35 @@
-from fastapi import FastAPI
+from fastapi.responses import JSONResponse
+from fastapi import HTTPException, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from routers.user import router_user
+
+from models.jabatan import Jabatan
+from models.paramedis import Paramedis
+from models.user import User
+from models.admisi import Admisi
+from models.spesialis import Spesialis
+from models.pasien import Pasien
+from models.klinis import Klinis
 
 app = FastAPI()
 
-@app.get("/")
-async def cek_main():
-    return {"pesan": "Test"}
+@app.exception_handler(HTTPException)
+async def set_format_json_handler(request: Request, exc: HTTPException):
+    return JSONResponse(
+        status_code = exc.status_code,
+        content={
+            "status": exc.status_code,
+            "pesan": str(exc.detail),
+            "data": None
+        }
+    )
+
+app.include_router(router_user)
+
+# @app.get("/")
+# async def cek_main():
+#     return {"pesan": "Test"}
+
 
 origins = [
     "http://127.0.0.1:8000",
