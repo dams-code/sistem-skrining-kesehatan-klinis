@@ -1,0 +1,31 @@
+const Backend_Url = import.meta.env.VITE_URL_Backend;
+
+export const registrasiUser = async (DataUser) => {
+    try{
+        const response = await fetch(`${Backend_Url}/user/registrasi`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(DataUser),
+        });
+
+        if(!response.ok){
+            return {
+                pesan: "Registrasi User Gagal",
+                detail: `Detail Error ${data.detail}`
+            };
+        }
+
+        const data = await response.json();
+
+        return {
+            pesan: "Registrasi User Sukses",
+            data: data
+        };
+    } catch(error){
+        return {
+            pesan: "Tidak dapat terhubung ke FastAPI endpoint"
+        }
+    }
+}
