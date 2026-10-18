@@ -7,17 +7,17 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime
 
 class UserRepository:
-
-    @staticmethod
-    async def cek_user(user: UserCreate, sesi_db: AsyncSession):
+    def __init__(self, sesi_db: AsyncSession):
+        self.sesi_db = sesi_db
+        
+    async def cek_user(self, user: UserCreate):
         query = select(User).where(func.lower(User.username) == user.username.lower())
 
-        result = await sesi_db.execute(query)
+        result = await self.sesi_db.execute(query)
 
         return result.scalars().one_or_none()
 
-    @staticmethod
-    async def buat_user(user: UserCreate, sesi_db: AsyncSession):
+    async def buat_user(self, user: UserCreate):
 
         get_data_user = user.model_dump(exclude_unset=True)
 
@@ -33,12 +33,13 @@ class UserRepository:
             created_by=user.username
         )
 
-        sesi_db.add(result_buat_user)
+        self.sesi_db.add(result_buat_user)
 
-        await sesi_db.commit()
-        await sesi_db.refresh(result_buat_user)
+        await self.sesi_db.commit()
+        await self.sesi_db.refresh(result_buat_user)
 
         return result_buat_user
+
 
 
         

@@ -8,6 +8,9 @@ router_user = APIRouter(prefix="/user", tags=["User"])
 
 @router_user.post("", response_model=ResultUser[UserResponse], status_code=status.HTTP_201_CREATED)
 async def tambah_user(user: UserCreate, sesi_db: AsyncSession = Depends(get_database)):
-    return await UserService.registrasi_user(user, sesi_db)
+    
+    userService = UserService(sesi_db)
+    
+    return await userService.registrasi_user(user)
 
 

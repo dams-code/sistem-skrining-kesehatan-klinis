@@ -8,10 +8,14 @@ from fastapi import HTTPException, status
 
 class UserService:
 
-    @staticmethod
-    async def registrasi_user(registrasi_user: UserCreate, sesi_db: AsyncSession)-> ResultUser[UserResponse]:
+    def __init__(self, sesi_db: AsyncSession):
+        self.sesi_db = sesi_db
 
-        cek_user = await UserRepository.cek_user(registrasi_user, sesi_db)
+    async def registrasi_user(self, registrasi_user: UserCreate)-> ResultUser[UserResponse]:
+
+        userRepository = UserRepository(self.sesi_db)
+
+        cek_user = await userRepository.cek_user(registrasi_user)
 
         if cek_user is not None:
             raise HTTPException(
@@ -25,7 +29,7 @@ class UserService:
                 detail="Password User tidak boleh kosong"
             )
 
-        hasil_registrasi_user = await UserRepository.buat_user(registrasi_user, sesi_db)
+        hasil_registrasi_user = await userRepository.buat_user(registrasi_user)
 
         if not hasil_registrasi_user:
             raise HTTPException(
