@@ -1,10 +1,13 @@
 
+from datetime import timedelta
 from repositories.user import UserRepository
 from schemas.user import UserCreate
 from sqlalchemy.ext.asyncio import AsyncSession
 from schemas.user import ResultUser, UserResponse
-
+from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import HTTPException, status
+from helpers.helper_password import verify_password
+from core.security import JWTToken
 
 class UserService:
 
@@ -41,4 +44,41 @@ class UserService:
             status=status.HTTP_201_CREATED,
             pesan="Registrasi User Berhasil",
             data= UserResponse.model_validate(hasil_registrasi_user)
+        )
+
+    async def login(self, form_data: OAuth2PasswordRequestForm) -> ResultUser[UserResponse]:
+
+        userRepository = UserRepository(self.sesi_db)
+
+        result_data_user = await userRepository.login_user(form_data)
+
+        if result_data_user is None:
+            raise HTTPException(
+                status_code = status.HTTP_401_UNAUTHORIZED,
+                detail=f"Username {form_data.username} tidak ditemukan",
+                headers={"WWW-Authenticate": "Bearer"}
+            )
+
+        if not verify_password(form_data.password, result_data_user.hashed_password):
+            raise HTTPException(
+                status_code = status.HTTP_401_UNAUTHORIZED,
+                detail=f"Password yang dimasukan salah",
+                headers={"WWW-Authenticate": "Bearer"}
+            )
+
+        data_user = {
+            "sub": result_data_user.username
+        }
+
+        access_token = JWTToken.create_access_token(data_user, expires_delta=timedelta(hours=1))
+
+        return ResultUser[UserResponse](
+            status=status.HTTP_200_OK,
+            pesan=f"User {form_data.username} berhasil login",
+            data=UserResponse.model_validate(result_data_user),
+            data_token = {
+                "access_token": access_token,
+                "token_type": "bearer",
+                "username":form_data.username
+            }
         )

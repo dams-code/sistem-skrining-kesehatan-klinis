@@ -5,6 +5,7 @@ from helpers.helper_password import *
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime
+from fastapi.security import OAuth2PasswordRequestForm
 
 class UserRepository:
     def __init__(self, sesi_db: AsyncSession):
@@ -15,7 +16,7 @@ class UserRepository:
 
         result = await self.sesi_db.execute(query)
 
-        return result.scalars().one_or_none()
+        return result.scalar_one_or_none()
 
     async def buat_user(self, user: UserCreate):
 
@@ -39,6 +40,15 @@ class UserRepository:
         await self.sesi_db.refresh(result_buat_user)
 
         return result_buat_user
+
+    async def login_user(self, form_data: OAuth2PasswordRequestForm):
+        query = select(User).where(func.lower(User.username) == form_data.username.lower())
+
+        result = await self.sesi_db.execute(query)
+
+        return result.scalar_one_or_none()
+
+        
 
 
 

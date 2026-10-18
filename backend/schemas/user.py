@@ -54,9 +54,15 @@ class UserUpdate(BaseModel):
     alamat: str | None
     jabatan_id: int
     paramedis_id: int
-    
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+    username: str
+
 class ResultUser(BaseModel, Generic[T]):
     status: int
     pesan: str
     data: Optional[T] = None
+    data_token: Optional[Token] = None
 
