@@ -8,8 +8,8 @@ from typing import Annotated
 
 router_user = APIRouter(prefix="/user", tags=["User"])
 
-@router_user.post("", response_model=ResultUser[UserResponse], status_code=status.HTTP_201_CREATED)
-async def tambah_user(user: UserCreate, sesi_db: AsyncSession = Depends(get_database)):
+@router_user.post("/registrasi", response_model=ResultUser[UserResponse], status_code=status.HTTP_201_CREATED)
+async def registrasi_user(user: UserCreate, sesi_db: AsyncSession = Depends(get_database)):
     
     userService = UserService(sesi_db)
     
