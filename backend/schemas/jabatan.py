@@ -1,13 +1,12 @@
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
+from typing import Optional, TypeVar, Generic
 
-
+T = TypeVar("T")
 class JabatanResponse(BaseModel):
     id: int
     nama_jabatan: str
     kategori: str
-    prefix: str
-    suffix: str
     created_at: datetime
     created_by: str
     modified_at: datetime | None
@@ -18,13 +17,12 @@ class JabatanResponse(BaseModel):
 class JabatanCreate(BaseModel):
     nama_jabatan: str
     kategori: str
-    prefix: str
-    suffix: str
 
 class JabatanUpdate(BaseModel):
     nama_jabatan: str | None
     kategori: str | None
-    prefix: str | None
-    suffix: str | None
 
-
+class ResultJabatan(BaseModel, Generic[T]):
+    status: int
+    pesan: str
+    data: Optional[T] = None
