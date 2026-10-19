@@ -63,8 +63,8 @@ export default function Login(){
                             </div>
 
                             <div className="g-3">
-                                <button type="Login" disabled={loading} className="btn btn-primary" style={{width: '100%'}}>
-                                    {loading ? 'Tunggu..' : 'Lanjut'}
+                                <button type="button" disabled={loading} className="btn btn-primary" style={{width: '100%'}}>
+                                    {loading ? 'Tunggu..' : 'Login'}
                                 </button>
                             </div>
                         </form>

@@ -12,19 +12,22 @@ export const registrasiUser = async (DataUser) => {
 
         if(!response.ok){
             return {
+                success: false,
                 pesan: "Registrasi User Gagal",
-                detail: `Detail Error ${data.detail}`
+                detail: `Detail Error ${response.detail}`
             };
         }
 
         const data = await response.json();
 
         return {
+            success: true,
             pesan: "Registrasi User Sukses",
             data: data
         };
     } catch(error){
         return {
+            success: false,
             pesan: "Tidak dapat terhubung ke FastAPI endpoint"
         }
     }

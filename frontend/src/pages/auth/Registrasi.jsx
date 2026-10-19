@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {registrasiUser} from '../../services/auth/Registrasi';
+import {getJabatan} from '../../services/Jabatan/Jabatan';
 
 
 export default function Registrasi(){
@@ -10,9 +11,8 @@ export default function Registrasi(){
     const [konfirmPassword, setKonfirmPassword] = useState('');
     const [noTelp, setNoTelp] = useState('');
     const [alamat, setAlamat] = useState('');
-    const [statusUser, setStatusUser] = useState(true);
     const [jabatanId, setJabatanId] = useState(0);
-    const [pilihJabatan, setPilihJabatan] = useState()
+    const [listJabatan, setListJabatan] = useState();
     const [paramedisId, setParamedisId] = useState(0);
 
     const dataRegistrasi = {
@@ -22,7 +22,6 @@ export default function Registrasi(){
         password: password,
         noTelp: noTelp,
         alamat: alamat,
-        statusUser: statusUser,
         jabatanId: jabatanId,
         paramedisId: paramedisId
     };
@@ -54,6 +53,25 @@ export default function Registrasi(){
             setErrorMsg(`Registrasi Gagal, cek kembali data yang diinput ${result.pesan}`)
         }
     }
+
+    useEffect(() => {
+        const getJabatanData = async () => {
+            const response = await getJabatan();
+
+            // console.log("Debug Response Jabatan:", response.data);
+            // console.log("Debug Response Jabatan tipe:", typeof(response.data));
+            // console.log("Debug Response Jabatan data:", response.data.data);
+            
+            if(!response.success){
+                alert("Data Jabatan tidak ditemukan");
+                return;
+            }
+
+            setListJabatan(response.data.data);
+        }
+
+        getJabatanData();
+    }, []);
 
     return (
         <div className="container-fluid d-flex justify-content-center align-item-center">
@@ -168,11 +186,16 @@ export default function Registrasi(){
                                         <select 
                                             className="form-select" 
                                             id="list_jabatan"
-                                            value={pilihJabatan} 
-                                            onChange={(e) => setPilihJabatan(e.target.value)}
+                                            value={jabatanId} 
+                                            onChange={(e) => setJabatanId(e.target.value)}
                                             required
                                         >
                                             <option value="">-- Pilih Jabatan --</option>
+                                            {
+                                                Array.isArray(listJabatan) && listJabatan.map((jabatan) => (
+                                                    <option key={jabatan.id} value={jabatan.id}>{jabatan.nama_jabatan}</option>
+                                                ))
+                                            }
                                         </select>
                                     </div>
                                 </div>
@@ -183,7 +206,7 @@ export default function Registrasi(){
                             )}
 
                             <div className="g-3 text-end mt-4">
-                                <button className="btn btn-primary mx-auto" type="button">Registrasi</button>
+                                <button disabled={loading} className="btn btn-primary mx-auto" type="button">{loading ? 'Tunggu...' : 'Registrasi'}</button>
                             </div>
 
                             <div style={{borderTop: "1px solid #ccc", marginTop: "18px", paddingTop: "5px"}}></div>
