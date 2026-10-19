@@ -2,8 +2,15 @@
 backend/.skema
 */.venv
 backend/.venv
-*/.env
-backend/.env
+# */.env
+.env
+# backend/.env
+
+backend/alembic/versions/*
+*/alembic/versions/*
+!backend/alembic/versions/.gitkeep
+!*/alembic/versions/.gitkeep
+
 */__pycache__/
 backend/__pycache__/
 */.vscode/
