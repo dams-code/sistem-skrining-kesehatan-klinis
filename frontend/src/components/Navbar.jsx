@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function Navbar({namaProject = '', username= '', nama_jabatan= '', status=''}){
+export default function Navbar({ sidebarOpen, namaProject = '', username= '', nama_jabatan= '', status=''}){
     const [waktu, setWaktu] = useState(new Date());
 
     useEffect(() => {
@@ -23,11 +23,13 @@ export default function Navbar({namaProject = '', username= '', nama_jabatan= ''
 
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
-            <div className="shadow-sm container-fluid border-bottom border-dark-subtle pb-2 justify-content-between">
+            <div className={`shadow-sm container-fluid border-bottom border-dark-subtle pb-2 justify-content-between ${
+                sidebarOpen ? 'ps-4' : 'ps-5'
+            }`} style={{transition: 'padding-left 0.3s ease'}}>
                 <div className="col text-start">
-                    <h5 className="fw-bold m-0 text-dark" style={{fontSize: '18px'}}>{namaProject}</h5>
+                    <h5 className="fw-bold m-0 text-primary" style={{fontSize: '22px', letterSpacing: '0.002rem', borderBottom: '1px solid #1b1b1b', width: 'max-content'}}>{namaProject}</h5>
                     <small className="text-secondary" style={{fontSize: '12px'}}>
-                        <span className="fw-semibold text-secondary">{formatTanggal}</span>
+                        <span className="fw-semibold text-dark" style={{fontSize: '15.25px'}}>{formatTanggal}</span>
                     </small>
                 </div>
 
