@@ -22,8 +22,8 @@ export default function Navbar({namaProject = '', username= '', nama_jabatan= ''
     }).replace("pukul", "-");
 
     return (
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="shadow-sm container-fluid border-bottom border-dark-subtle pb-2 justify-content-between">
+        <nav className="navbar navbar-expand-lg bg-body-tertiary">
+            <div className="shadow-sm container-fluid border-bottom border-dark-subtle pb-2 justify-content-between">
                 <div className="col text-start">
                     <h5 className="fw-bold m-0 text-dark" style={{fontSize: '18px'}}>{namaProject}</h5>
                     <small className="text-secondary" style={{fontSize: '12px'}}>
@@ -33,7 +33,10 @@ export default function Navbar({namaProject = '', username= '', nama_jabatan= ''
 
                 <div className="d-flex align-items-center gap-3 me-3">
                     <div className="d-flex align-items-center gap-3">
-                        <span className="badge bg-success bg-opacity-10 text-dark"><span className="rounded-circle bg-success d-inline-block me-1" style={{width: '8px', height: '8px'}}></span> {status}</span>
+                        <span className="badge bg-success bg-opacity-10 text-dark">
+                            <span className="rounded-circle bg-success d-inline-block me-1 pulse" style={{width: '8px', height: '8px'}}></span> 
+                            {status}
+                        </span>
                         <span className="badge bg-primary bg-opacity-10 text-primary">{nama_jabatan}</span>
                     </div>
                 </div>
@@ -71,6 +74,28 @@ export default function Navbar({namaProject = '', username= '', nama_jabatan= ''
                     </div>
                 </div>
             </div>
+
+            <style>{`
+                @keyframes setPulse{
+                    0% {
+                        transform: scale(0);
+                        box-shadow: 0 0 0 0 rgba(25,135, 84, 0.7);
+                    }
+                    70% {
+                        transform: scale(1);
+                        box-shadow: 0 0 0 6px rgba(25, 135, 84, 0);
+                    }
+                    100% {
+                        transform: scale(0.95);
+                        box-shadow: 0 0 0 0 rgba(25,135, 84, 0);
+                    }
+                }
+
+                .pulse{
+                    animation: setPulse 1.4s infinite;
+                }
+            `}
+            </style>
         </nav>
     )
 }

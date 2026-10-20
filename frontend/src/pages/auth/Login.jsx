@@ -29,7 +29,7 @@ export default function Login(){
 
     return (
         <div className="container d-flex justify-content-center align-item-center">
-            <div className="row col-md-6 mt-3 justify-content-center align-item-center">
+            <div className="row col-md-5 mt-3 justify-content-center align-item-center">
                 <div className="card shadow-sm p-3 mb-5 bg-body rounded">
                     <div className="card-body justify-content-center">
                         <form onSubmit={handleLogin} style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
