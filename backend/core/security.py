@@ -53,7 +53,7 @@ class JWTToken:
                     headers={"WWW-Authenticate": "Bearer"}
                 )
             
-            token_data = TokenData(username)
+            token_data = TokenData(username=username)
 
             return token_data
 

@@ -3,7 +3,7 @@ from schemas.user import *
 from services.user import UserService
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.database import get_database
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from typing import Annotated
 
 router_user = APIRouter(prefix="/user", tags=["User"])
@@ -21,3 +21,11 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], sesi
     userService = UserService(sesi_db)
 
     return await userService.login(form_data)
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/login")
+
+@router_user.post("/logout", response_model=ResultUser[None])
+async def logout(token: Annotated[str, Depends(oauth2_scheme)], sesi_db: AsyncSession = Depends(get_database)):
+    userService = UserService(sesi_db)
+
+    return await userService.logout(token)

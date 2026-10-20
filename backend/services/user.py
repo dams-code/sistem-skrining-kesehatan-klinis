@@ -82,3 +82,22 @@ class UserService:
                 "username":form_data.username
             }
         )
+
+    async def logout(self, token: str)-> ResultUser[None]:
+
+        try:
+            cek_token = JWTToken.verify_access_token(token)
+
+            return ResultUser[None](
+                status=status.HTTP_200_OK,
+                pesan="Anda berhasil logout"
+            )
+
+        except HTTPException as e:
+
+            return ResultUser[None](
+                status=status.HTTP_401_UNAUTHORIZED,
+                pesan=e.detail
+            )
+            
+            
