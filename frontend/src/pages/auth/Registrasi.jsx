@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {registrasiUser} from '../../services/auth/Registrasi';
 import {getJabatan} from '../../services/Jabatan/Jabatan';
-
+import {cekFormatUsername, cekDigitPassword} from '../../helpers/Helper';
 
 export default function Registrasi(){
     const [username, setUsername] = useState('');
@@ -13,17 +13,15 @@ export default function Registrasi(){
     const [alamat, setAlamat] = useState('');
     const [jabatanId, setJabatanId] = useState(0);
     const [listJabatan, setListJabatan] = useState();
-    const [paramedisId, setParamedisId] = useState(0);
 
     const dataRegistrasi = {
         username: username,
-        namaDepan: namaDepan,
-        namaBelakang: namaBelakang,
+        nama_depan: namaDepan,
+        nama_belakang: namaBelakang,
         password: password,
-        noTelp: noTelp,
+        no_telp: noTelp,
         alamat: alamat,
-        jabatanId: jabatanId,
-        paramedisId: paramedisId
+        jabatan_id: jabatanId
     };
 
     const [errorMsg, setErrorMsg] = useState('');
@@ -35,7 +33,7 @@ export default function Registrasi(){
         setErrorMsg('');
         setLoading(true);
 
-        if (dataRegistrasi.password !== confirmPassword){
+        if (dataRegistrasi.password !== konfirmPassword){
             alert("Password harus sama dengan konfirmasi password");
             return;
         }
@@ -81,7 +79,7 @@ export default function Registrasi(){
                         <form onSubmit={handleRegistrasi}>
                             <div className="row mb-1">
                                 <div className="col-12">
-                                    <a href="/login" className="d-flex gap-2">
+                                    <a href="/login" className="shadow-sm d-flex gap-2 text-decoration-none" style={{width: "max-content", backgroundColor: "#3c763d", color: "#fff", padding: "0.3rem 0.8rem", borderRadius: "6px"}}>
                                         <i className="bi bi-arrow-bar-left align-content-center"></i>
                                         <p className="m-0 p-0 align-content-center">Login, jika sudah punya akun</p>
                                     </a>
@@ -104,7 +102,16 @@ export default function Registrasi(){
                                             type="text" 
                                             className="form-control" 
                                             value={username}
-                                            onChange={(e) => setUsername(e.target.value)}
+                                            onChange={(e) => {
+                                                const dataUsername = e.target.value;
+                                                setUsername(dataUsername);
+
+                                                if (!cekFormatUsername(dataUsername)){
+                                                    setErrorMsg("Username tidak boleh mengandung spasi atau karakter spesial seperti ' atau \"");
+                                                } else {
+                                                    setErrorMsg("");
+                                                }
+                                            }}
                                             placeholder="Masukkan username"
                                             required
                                         />
@@ -152,7 +159,16 @@ export default function Registrasi(){
                                             type="password" 
                                             className="form-control" 
                                             value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
+                                            onChange={(e) => {
+                                                const dataPassword = e.target.value;
+                                                setPassword(dataPassword);
+
+                                                if (dataPassword.length > 0 && dataPassword.length < 6){
+                                                    setErrorMsg("Input Password harus lebih dari 6 digit");
+                                                } else {
+                                                    setErrorMsg("");
+                                                }
+                                            }}
                                             placeholder="Minimal 6 karakter"
                                             required
                                         />
@@ -164,7 +180,16 @@ export default function Registrasi(){
                                             type="password" 
                                             className="form-control"
                                             value={konfirmPassword}
-                                            onChange={(e) => setKonfirmPassword(e.target.value)}
+                                            onChange={(e) => {
+                                                const dataKonfirmPassword = e.target.value;
+                                                setKonfirmPassword(dataKonfirmPassword);
+
+                                                if (dataKonfirmPassword.length > 0 && dataKonfirmPassword.length < 6){
+                                                    setErrorMsg("Input Konfirmasi Password harus lebih dari 6 digit");
+                                                } else {
+                                                    setErrorMsg("");
+                                                }
+                                            }}
                                             placeholder="Input ulang password"
                                             required
                                         />
@@ -206,7 +231,7 @@ export default function Registrasi(){
                             )}
 
                             <div className="g-3 text-end mt-4">
-                                <button disabled={loading} className="btn btn-primary mx-auto" type="button">{loading ? 'Tunggu...' : 'Registrasi'}</button>
+                                <button disabled={loading} className="btn btn-primary mx-auto" type="submit">{loading ? 'Tunggu...' : 'Registrasi'}</button>
                             </div>
 
                             <div style={{borderTop: "1px solid #ccc", marginTop: "18px", paddingTop: "5px"}}></div>
