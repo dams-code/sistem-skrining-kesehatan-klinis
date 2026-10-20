@@ -72,7 +72,7 @@ export default function Registrasi(){
     }, []);
 
     return (
-        <div className="container-fluid d-flex justify-content-center align-item-center">
+        <div className="container d-flex justify-content-center align-item-center">
             <div className="row col-md-12 mt-3 justify-content-center align-item-center">
                 <div className="card shadow-sm p-3 mb-5 bg-body rounded">
                     <div className="card-body justify-content-center">

@@ -20,7 +20,7 @@ export default function Login(){
         if(result.success){
             alert("Login Berhasil");
 
-            localStorage.setItem("access_token", result.data_token.access_token);
+            localStorage.setItem("access_token", result.data.data_token.access_token);
             window.location.href = "/menu"
         } else {
             setErrorMsg(`Login gagal, ${result.pesan}`);
@@ -28,7 +28,7 @@ export default function Login(){
     };
 
     return (
-        <div className="container-fluid d-flex justify-content-center align-item-center">
+        <div className="container d-flex justify-content-center align-item-center">
             <div className="row col-md-6 mt-3 justify-content-center align-item-center">
                 <div className="card shadow-sm p-3 mb-5 bg-body rounded">
                     <div className="card-body justify-content-center">
@@ -45,7 +45,7 @@ export default function Login(){
                             <div className="row align-item-center d-grid mx-1 mb-3">
                                 <label className="text-start ps-1 mt-2">Username</label>
                                 <input  type="text" placeholder="Masukan Username" 
-                                        className="form-control"s
+                                        className="form-control"
                                         value={username} 
                                         onChange={(e) => setUsername(e.target.value)} 
                                         required 
@@ -71,7 +71,7 @@ export default function Login(){
 
                         {errorMsg && (
                             <p style={{ color: '#ef4444', fontSize: '13px', textAlign: 'center', marginTop: '14px', lineHeight: '1.4' }}>
-                            {errorMsg}
+                                {errorMsg}
                             </p>
                         )}
 
