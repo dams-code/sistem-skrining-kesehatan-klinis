@@ -1,6 +1,7 @@
 
 import {loginUser} from '../../services/auth/Login';
 import {useState} from 'react';
+import Swal from 'sweetalert2';
 
 export default function Login(){
     const [username, setUsername] = useState('');
@@ -18,12 +19,29 @@ export default function Login(){
         setLoading(false);
 
         if(result.success){
-            alert("Login Berhasil");
+            // alert("Login Berhasil");
 
             localStorage.setItem("access_token", result.data.data_token.access_token);
-            window.location.href = "/menu"
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Login Berhasil',
+                text: `Anda dengan username ${username} berhasil login`,
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                
+                window.location.href="/menu";
+            });
+            
         } else {
             setErrorMsg(`Login gagal, ${result.pesan}`);
+
+            Swal.fire({
+                icon: "error",
+                title: "Login Gagal",
+                text: `Username atau password salah, ${result.pesan}`
+            });
         }
     };
 

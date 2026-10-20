@@ -32,10 +32,11 @@ export const loginUser = async(username, password) => {
         }
 
     } catch(error){
+        console.log(`Login Gagal ${error}`);
 
         return {
             success: false,
-            pesan: "Tidak dapat terhubung ke FastAPI endpoint"
+            pesan: `Tidak dapat terhubung ke FastAPI endpoint, ${error}`
         }
     }
 }

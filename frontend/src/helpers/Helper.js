@@ -3,8 +3,3 @@ export const cekFormatUsername = (username) => {
 
     return setRegex.test(username);
 }
-
-
-export const cekDigitPassword = (password) => {
-    return password.length < 6;
-}

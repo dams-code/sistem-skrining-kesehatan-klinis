@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import { LogoutUser } from '../services/auth/Logout';
+import Swal from 'sweetalert2';
+
 
 export default function Navbar({ sidebarOpen, namaProject = '', username= '', nama_jabatan= '', status=''}){
     const [waktu, setWaktu] = useState(new Date());
@@ -20,6 +23,33 @@ export default function Navbar({ sidebarOpen, namaProject = '', username= '', na
         minute: '2-digit',
         second: '2-digit'
     }).replace("pukul", "-");
+
+    const handleLogout = async () => {
+        const response = await LogoutUser();
+
+        if(response.success){
+            Swal.fire({
+                icon: 'success',
+                title: response.kategori,
+                text: response.pesan,
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.replace("/login");
+            });
+
+        } else {
+            Swal.fire({
+                icon: 'success',
+                title: response.kategori,
+                text: response.pesan,
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.replace("/login");
+            });
+        }
+    }
 
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -65,7 +95,7 @@ export default function Navbar({ sidebarOpen, namaProject = '', username= '', na
                                         </li>
                                         <li><div className="hr opacity-25 dropdown-divider"></div></li>
                                         <li>
-                                            <button className="dropdown-item text-danger" type="button">
+                                            <button className="dropdown-item text-danger" type="button" onClick={handleLogout}>
                                                 <i className="bi bi-box-arrow-right me-2"></i>Logout
                                             </button>
                                         </li>

@@ -26,9 +26,11 @@ export const registrasiUser = async (DataUser) => {
             data: data
         };
     } catch(error){
+        console.log(`Registrasi Gagal ${error}`);
+        
         return {
             success: false,
-            pesan: "Tidak dapat terhubung ke FastAPI endpoint"
+            pesan: `Tidak dapat terhubung ke FastAPI endpoint, ${error}`
         }
     }
 }

@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import {registrasiUser} from '../../services/auth/Registrasi';
 import {getJabatan} from '../../services/Jabatan/Jabatan';
-import {cekFormatUsername, cekDigitPassword} from '../../helpers/Helper';
+import {cekFormatUsername} from '../../helpers/Helper';
+import Swal from 'sweetalert2';
+
 
 export default function Registrasi(){
     const [username, setUsername] = useState('');
@@ -43,12 +45,25 @@ export default function Registrasi(){
         setLoading(false);
 
         if (result.success){
-            alert("Registrasi Berhasil");
-            window.location.href = "/login";
+            // alert("Registrasi Berhasil");
+            Swal.fire({
+                icon: "success",
+                title: "Registrasi Berhasil",
+                text: "Registrasi user berhasil, Silahkan login kembali",
+                timer: 200,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = "/login";
+            });
             
         } else {
-
             setErrorMsg(`Registrasi Gagal, cek kembali data yang diinput ${result.pesan}`)
+            
+            Swal.fire({
+                icon: "error",
+                title: "Registrasi Gagal",
+                text: `Terjadi Kesahalan Registrasi User ${result.pesan}`
+            });
         }
     }
 
@@ -61,7 +76,13 @@ export default function Registrasi(){
             // console.log("Debug Response Jabatan data:", response.data.data);
             
             if(!response.success){
-                alert("Data Jabatan tidak ditemukan");
+                // alert("Data Jabatan tidak ditemukan");
+                Swal.fire({
+                    icon: "error",
+                    title: "Data jabatan tidak ditemukan",
+                    text: `Gagal load data jabatan ${response.pesan}`
+                });
+                
                 return;
             }
 
