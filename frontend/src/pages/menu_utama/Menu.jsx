@@ -41,8 +41,6 @@ export default function MenuUtama() {
 
                 <Navbar
                     namaProject = "Sistem Skrining Kesehatan Klinis"
-                    username= "Dams"
-                    nama_jabatan= "Super Admin"
                     status="online"
                     sidebarOpen={sidebarOpen}
                 />

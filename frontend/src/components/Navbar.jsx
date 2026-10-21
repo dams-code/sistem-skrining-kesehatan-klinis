@@ -1,18 +1,42 @@
 import { useState, useEffect } from "react";
 import { LogoutUser } from '../services/auth/Logout';
 import Swal from 'sweetalert2';
+import {SesiAktif} from '../services/auth/SesiAktif';
 
 
-export default function Navbar({ sidebarOpen, namaProject = '', username= '', nama_jabatan= '', status=''}){
+export default function Navbar({ sidebarOpen, namaProject = '', status=''}){
     const [waktu, setWaktu] = useState(new Date());
+    const [userAktif, setUserAKtif] = useState(null);
 
     useEffect(() => {
         const timer = setInterval(() => {
+
             setWaktu(new Date());
+
         }, 1000);
 
         return () => clearInterval(timer);
     }, []);
+
+    useEffect(() => {
+        const getSesiAktif = async() => {
+            const result = await SesiAktif();
+
+            if(!result.success){
+                Swal.fire({
+                    icon: "error",
+                    title: "Data User Aktif tidak ditemukan",
+                    text: `Gagal load data User Aktif ${response.pesan}`
+                });
+
+                return;
+            }
+
+            setUserAKtif(result.data.data);
+        }
+
+        getSesiAktif();
+    }, [])
 
     const formatTanggal = waktu.toLocaleDateString("id-ID", {
         weekday: 'long',
@@ -69,7 +93,7 @@ export default function Navbar({ sidebarOpen, namaProject = '', username= '', na
                             <span className="rounded-circle bg-success d-inline-block me-1 pulse" style={{width: '8px', height: '8px'}}></span> 
                             {status}
                         </span>
-                        <span className="badge bg-primary bg-opacity-10 text-primary">{nama_jabatan}</span>
+                        <span className="badge bg-primary bg-opacity-10 text-primary">{userAktif ? userAktif.nama_jabatan : 'loading...'}</span>
                     </div>
                 </div>
 
@@ -84,7 +108,7 @@ export default function Navbar({ sidebarOpen, namaProject = '', username= '', na
                                 <li className="nav-item dropdown">
                                     <a className="nav-link dropdown-toggle d-flex gap-2 align-items-center" data-bs-toggle="dropdown" role="button" aria-expanded="false" href="javascript:void(0);">
                                         <i className="bi bi-person-circle fs-5 text-primary"></i>
-                                        <span>{username}</span>
+                                        <span>{userAktif ? userAktif.username : 'loading...'}</span>
                                     </a>
                                     <ul className="dropdown-menu dropdown-menu-end shadow-sm">
                                         <li><a className="dropdown-item" href="/editUser"><i className="bi bi-person-gear me-2"></i>Edit User</a></li>
