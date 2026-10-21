@@ -1,12 +1,12 @@
 const Backend_Url = import.meta.env.VITE_URL_Backend;
 
-export const getJabatan = async(nama_jabatan = '', kategori = '') => {
+export const getJabatan = async(params = {}) => {
     try{
 
         const parameterQuery = new URLSearchParams();
 
-        if (nama_jabatan) parameterQuery.append("nama_jabatan", nama_jabatan);
-        if (kategori) parameterQuery.append("kategori", kategori);
+        if (params.nama_jabatan) parameterQuery.append("nama_jabatan", params.nama_jabatan);
+        if (params.kategori) parameterQuery.append("kategori", params.kategori);
 
         const queryString = parameterQuery.toString() ? `?${parameterQuery.toString()}`: '';
 
