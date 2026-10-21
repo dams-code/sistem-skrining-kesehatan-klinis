@@ -17,7 +17,7 @@ class NamaJabatan(str, Enum):
 
 class Kategori(str, Enum):
     MEDIS = "Medis"
-    NON_MEDIS = "NON_MEDIS"
+    NON_MEDIS = "Non_Medis"
     
 class Jabatan(Base):
     __tablename__ = "jabatan"
@@ -26,7 +26,7 @@ class Jabatan(Base):
     
     nama_jabatan: Mapped[NamaJabatan] = mapped_column(sqlEnum(NamaJabatan), nullable=False, index=True)
 
-    kategori: Mapped[Kategori] = mapped_column(sqlEnum(Kategori), default="NON_MEDIS")
+    kategori: Mapped[Kategori] = mapped_column(sqlEnum(Kategori), default="Non-Medis")
     user_ref: Mapped["User"] = relationship("User", back_populates="jabatan_ref")
 
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())

@@ -1,5 +1,5 @@
 
-from sqlalchemy import select, or_
+from sqlalchemy import select, or_, String, cast
 from sqlalchemy.ext.asyncio import AsyncSession
 from models.jabatan import Jabatan
 
@@ -15,10 +15,10 @@ class JabatanRepository:
         conditions = []
 
         if nama_jabatan is not None:
-            conditions.append(Jabatan.nama_jabatan.ilike(f"%{nama_jabatan}%"))
+            conditions.append(cast(Jabatan.nama_jabatan, String).ilike(f"%{nama_jabatan}%"))
 
         if kategori is not None:
-            conditions.append(Jabatan.kategori == kategori)
+            conditions.append(cast(Jabatan.kategori, String).ilike(f"%{kategori}%"))
 
         if conditions:
             query = query.where(or_(*conditions))
