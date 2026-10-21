@@ -27,7 +27,7 @@ export default function Login(){
                 icon: 'success',
                 title: 'Login Berhasil',
                 text: `Anda dengan username ${username} berhasil login`,
-                timer: 2000,
+                timer: 2500,
                 showConfirmButton: false
             }).then(() => {
                 

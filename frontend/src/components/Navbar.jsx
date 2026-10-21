@@ -25,9 +25,11 @@ export default function Navbar({ sidebarOpen, namaProject = '', status=''}){
             if(!result.success){
                 Swal.fire({
                     icon: "error",
-                    title: "Data User Aktif tidak ditemukan",
-                    text: `Gagal load data User Aktif ${response.pesan}`
+                    title: "Data User Aktif",
+                    text: `Gagal load data User Aktif ${result.pesan}`
                 });
+
+                window.location.href = "/login";
 
                 return;
             }

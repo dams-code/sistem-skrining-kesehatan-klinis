@@ -15,6 +15,8 @@ export const loginUser = async(username, password) => {
             body: formData.toString()
         });
 
+        const data = await response.json();
+
         if(!response.ok){
             return {
                 success: false,
@@ -22,8 +24,6 @@ export const loginUser = async(username, password) => {
                 detail: `Detail Error ${data.detail}`
             };
         }
-
-        const data = await response.json();
 
         return {
             success: true,

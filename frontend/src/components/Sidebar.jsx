@@ -6,8 +6,7 @@ import {
 
 import { LuArrowDown} from "react-icons/lu";
 
-export default function Sidebar({cekSidebarOpen}) {
-    const [menuAktif, setMenuAktif] = useState("set-dashboard");
+export default function Sidebar({cekSidebarOpen, menuAktif, setMenuAktif}) {
 
     const [masterDataOpen, setMasterDataOpen] = useState(true);
     const [manajemenPasienOpen, setManajemenPasienOpen] = useState(true);

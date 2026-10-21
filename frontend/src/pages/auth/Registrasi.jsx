@@ -14,7 +14,7 @@ export default function Registrasi(){
     const [noTelp, setNoTelp] = useState('');
     const [alamat, setAlamat] = useState('');
     const [jabatanId, setJabatanId] = useState(0);
-    const [listJabatan, setListJabatan] = useState();
+    const [listJabatan, setListJabatan] = useState(null);
 
     const dataRegistrasi = {
         username: username,
@@ -50,7 +50,7 @@ export default function Registrasi(){
                 icon: "success",
                 title: "Registrasi Berhasil",
                 text: "Registrasi user berhasil, Silahkan login kembali",
-                timer: 200,
+                timer: 2500,
                 showConfirmButton: false
             }).then(() => {
                 window.location.href = "/login";
@@ -86,7 +86,7 @@ export default function Registrasi(){
                 return;
             }
 
-            setListJabatan(response.data.data);
+            setListJabatan(response.data?.data || []);
         }
 
         getJabatanData();

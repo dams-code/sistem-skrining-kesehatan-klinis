@@ -11,7 +11,13 @@ export const SesiAktif = async() => {
 
         const hasil = await response.json();
 
-        console.log("user aktif: ", hasil.data.username);
+        // console.log("user aktif: ", hasil.data.username);
+        if(!hasil || !hasil.data || !hasil.data.username ){
+            return {
+                success: false,
+                pesan: `Sesi telah berakhir, silahkan login kembali`
+            }
+        }
 
         return {
             success: true,
