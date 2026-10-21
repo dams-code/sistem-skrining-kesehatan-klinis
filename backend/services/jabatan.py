@@ -8,7 +8,7 @@ class JabatanService:
     def __init__(self, sesi_db: AsyncSession):
         self.sesi_db = sesi_db
 
-    async def result_get_jabatan(self, nama_jabatan: str | None, kategori: str | None)-> ResultJabatan[list[JabatanResponse]]:
+    async def get_jabatan(self, nama_jabatan: str | None, kategori: str | None)-> ResultJabatan[list[JabatanResponse]]:
 
         jabatanRepository = JabatanRepository(self.sesi_db)
 
@@ -37,7 +37,7 @@ class JabatanService:
             data= data_jabatan
         )
 
-    async def result_get_jabatan_id(self, id: int)-> ResultJabatan[JabatanResponse]:
+    async def get_jabatan_id(self, id: int)-> ResultJabatan[JabatanResponse]:
 
         jabatanRepository = JabatanRepository(self.sesi_db)
 

@@ -29,3 +29,9 @@ async def logout(token: Annotated[str, Depends(oauth2_scheme)], sesi_db: AsyncSe
     userService = UserService(sesi_db)
 
     return await userService.logout(token)
+
+@router_user.get("/aktif", response_model=ResultUser[UserResponse])
+async def user_aktif(token: Annotated[str, Depends(oauth2_scheme)], sesi_db: AsyncSession = Depends(get_database)):
+    userService = UserService(sesi_db)
+
+    return await userService.user_aktif(token)

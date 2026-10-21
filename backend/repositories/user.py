@@ -1,6 +1,5 @@
 from models.user import User
 from schemas.user import UserCreate
-from core.database import get_database
 from helpers.helper_password import *
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -48,7 +47,13 @@ class UserRepository:
 
         return result.scalar_one_or_none()
 
+    async def user_aktif(self, username: str):
 
+        query = select(User).where(func.lower(User.username) == username.lower())
+
+        result = await self.sesi_db.execute(query)
+
+        return result.scalar_one_or_none();
 
 
 

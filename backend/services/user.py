@@ -100,4 +100,31 @@ class UserService:
                 pesan=e.detail
             )
             
+    async def user_aktif(self, token: str)-> ResultUser[UserResponse]:
+
+        userRepository = UserRepository(self.sesi_db)
+
+        cek_token = JWTToken.verify_access_token(token)
+
+        if cek_token is not None:
             
+            result_data_user = await userRepository.user_aktif(cek_token.username)
+
+            if result_data_user is None:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Username tidak ada / belum registrasi"
+                )
+
+            return ResultUser[UserResponse](
+                status=status.HTTP_200_OK,
+                pesan=f"User {cek_token} ditemukan",
+                data=UserResponse.model_validate(result_data_user)
+            )
+
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=f"Token expired, Login dahulu"
+            )
+
