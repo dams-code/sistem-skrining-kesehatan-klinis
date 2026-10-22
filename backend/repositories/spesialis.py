@@ -1,8 +1,9 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from models.spesialis import Spesialis
-from schemas.spesialis import *
+from schemas.spesialis import SpesialisBase
 from datetime import datetime
+from fastapi import HTTPException, status
 
 class SpesialisRepository:
 
@@ -31,6 +32,18 @@ class SpesialisRepository:
     async def tambah_spesialis(self, spesialis: SpesialisBase, username_aktif: str):
 
         try:
+            query = select(Spesialis).where(Spesialis.nama == spesialis.nama)
+
+            result = await self.sesi_db.execute(query)
+
+            cek_spesialis = result.scalars().first()
+
+            if cek_spesialis:
+                raise HTTPException(
+                    status_code =status.HTTP_400_BAD_REQUEST,
+                    detail=f"Spesialis dengan nama '{spesialis.nama}' sudah ada di sistem."
+                )
+
             dataSpesialis = spesialis.model_dump()
 
             result_tambah_spesialis = Spesialis(
