@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {getJabatan} from '../../services/Jabatan/Jabatan';
 import Swal from 'sweetalert2';
-import { FiSearch, FiFilter, FiPlus, FiEdit, FiDelete } from 'react-icons/fi';
+import { FiSearch} from 'react-icons/fi';
 
 export default function ListJabatan(){
     const [dataJabatan, setDataJabatan] = useState([]);
@@ -19,7 +19,7 @@ export default function ListJabatan(){
                 if(result && !result.success){
                     Swal.fire({
                         icon: "error",
-                        title: "Gagal Get Data Jabatan",
+                        title: "Gagal get data jabatan",
                         text: result?.pesan,
                         timer: 2000,
                         showConfirmButton: false
@@ -71,20 +71,20 @@ export default function ListJabatan(){
                     />
                 </div>
 
-                <button className="btn btn-sm btn-primary d-flex align-items-center gap-1 px-3 shadow-none fw-medium">
+                {/* <button className="btn btn-sm btn-primary d-flex align-items-center gap-1 px-3 shadow-none fw-medium" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     <FiPlus size={16}/>
                     <span>Tambah Jabatan</span>
-                </button>
+                </button> */}
             </div>
             
-            <div className="table-responsive">
+            <div className="table-responsive mt-3">
                 <table className="table table-hover align-middle mb-0">
                 <thead>
-                    <tr className="bg-light text-secondary border-0">
+                    <tr className="bg-light text-secondary border-bottom">
                         <th className="p-3 border-0 rounded-start-3 text-muted fw-semibold small" style={{width: '70px'}}>No</th>
                         <th className="p-3 border-0 text-muted fw-semibold small text-start">Nama Jabatan</th>
                         <th className="p-3 border-0 text-muted fw-semibold small">Kategori</th>
-                        <th className="p-3 border-0 rounded-end-3 text-muted fw-semibold small text-center" style={{width: '120px'}}>Aksi</th>
+                        {/* <th className="p-3 border-0 rounded-end-3 text-muted fw-semibold small text-center" style={{width: '120px'}}>Aksi</th> */}
                     </tr>
                 </thead>
                 <tbody>
@@ -93,28 +93,28 @@ export default function ListJabatan(){
                         
                             dataJabatan.map((jabatan, index) => (
                                 <tr key={jabatan.id || index} className="border-bottom">
-                                    <td className="p-3 text-secondary fw-medium small">
+                                    <td className="px-3 py-2 text-secondary fw-medium small">
                                         {index + 1}
                                     </td>
-                                    <td className="p-3 fw-medium text-dark text-start">
+                                    <td className="px-3 py-2 fw-medium text-dark text-start">
                                         {jabatan.nama_jabatan}
                                     </td>
-                                    <td className="p-3 fw-medium">
+                                    <td className="px-3 py-2 fw-medium">
                                         <span className="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-3 py-2 rounded-pill fw-medium small">
                                             {jabatan.kategori || 'non-medis'}
                                         </span>
                                     </td>
-                                    <td className="p-3 text-center">
+                                    {/* <td className="px-3 py-1 text-center">
                                         <div className="d-flex justify-content-center gap-2">
                                             <button className="btn btn-sm btn-outline-primary border-0 bg-primary bg-opacity-10 text-primary p-2 rounded-2 d-flex align-items-center justify-content-center shadow-none">
                                                 <FiEdit size={15}/>
                                             </button>
 
                                             <button className="btn btn-sm btn-outline-danger border-0 bg-danger bg-opacity-10 text-danger p-2 rounded-2 d-flex align-items-center justify-content-center shadow-none">
-                                                <FiDelete size={15}/>
+                                                <FiTrash2 size={15}/>
                                             </button>
                                         </div>
-                                    </td>
+                                    </td> */}
                                 </tr>
                             )) 
                         ) : (
