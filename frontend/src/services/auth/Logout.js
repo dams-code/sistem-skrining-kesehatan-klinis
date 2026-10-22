@@ -35,9 +35,9 @@ export const LogoutUser = async () => {
             }
         }
         
-    } catch(err){
+    } catch(error){
 
-        console.error(`Gagal logout, ${err}`);
+        console.error(`Gagal logout, ${error}`);
 
         localStorage.removeItem("access_token");
         window.location.replace("/login");
@@ -45,7 +45,7 @@ export const LogoutUser = async () => {
         return {
             success: false,
             kategori: "Gagal Logout",
-            pesan: `Proses Logout gagal, ${err}`
+            pesan: `Tidak dapat terhubung ke FastAPI endpoint, ${error}`
         }
     }
 }

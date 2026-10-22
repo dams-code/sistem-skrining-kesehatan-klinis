@@ -10,15 +10,15 @@ export const registrasiUser = async (DataUser) => {
             body: JSON.stringify(DataUser),
         });
 
+        const data = await response.json();
+
         if(!response.ok){
             return {
                 success: false,
                 pesan: "Registrasi User Gagal",
-                detail: `Detail Error ${response.detail}`
+                detail: `Detail Error ${data.detail}`
             };
         }
-
-        const data = await response.json();
 
         return {
             success: true,
@@ -26,7 +26,7 @@ export const registrasiUser = async (DataUser) => {
             data: data
         };
     } catch(error){
-        console.log(`Registrasi Gagal ${error}`);
+        console.error(`Registrasi Gagal ${error}`);
         
         return {
             success: false,

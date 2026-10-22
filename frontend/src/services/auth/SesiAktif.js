@@ -25,13 +25,13 @@ export const SesiAktif = async() => {
             data: hasil
         }
         
-    } catch(err){
+    } catch(error){
 
-        console.error(`Cek Sesi User AKtif Gagal, ${err}`);
+        console.error(`Cek Sesi User AKtif Gagal, ${error}`);
 
         return {
             success: false,
-            pesan: `Cek Sesi User AKtif Gagal , ${err}`
+            pesan: `Tidak dapat terhubung ke FastAPI endpoint, ${error}`
         }
     }
 

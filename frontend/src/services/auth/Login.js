@@ -32,7 +32,7 @@ export const loginUser = async(username, password) => {
         }
 
     } catch(error){
-        console.log(`Login Gagal ${error}`);
+        console.error(`Login Gagal ${error}`);
 
         return {
             success: false,
