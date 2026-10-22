@@ -2,6 +2,7 @@ import Sidebar from '../../components/Sidebar';
 import Navbar from '../../components/Navbar';
 import { useState } from 'react';
 import ListJabatan from '../../pages/jabatan/Jabatan';
+import ListSpesialis from '../spesialis/Spesialis';
 
 import { LuArrowLeft, LuArrowRight } from "react-icons/lu";
 
@@ -49,6 +50,8 @@ export default function MenuUtama() {
                 <div className="p-4 flex-grow-1 overflow-auto">
                     {/* <p>layout form (on-progess)</p> */}
                     {menuAktif === 'jabatan' && <ListJabatan /> }
+
+                    {menuAktif === 'spesialis' && <ListSpesialis />}
 
                 </div>
 
