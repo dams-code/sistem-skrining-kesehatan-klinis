@@ -29,10 +29,44 @@ export const getJabatan = async(params = {}) => {
         };
 
     } catch(error){
+        console.error(error);
+        
         return {
             success: false,
-            pesan: "Tidak dapat terhubung ke FastAPI endpoint"
+            pesan: `Tidak dapat terhubung ke FastAPI endpoint ${error}`
         };
+    }
+}
+
+export const getListKategori = async() => {
+    try{
+
+        const response = await fetch(`${Backend_Url}/jabatan/list-kategori`);
+
+        if(!response.ok){
+
+            return {
+                success: false,
+                pesan: "Get list kategori gagal",
+                detail: `Detail Error ${response.detail}`
+            }
+        }
+
+        const result = await response.json();
+
+        return {
+            success: true,
+            pesan: "Data list kategori berhasil ter-load",
+            data: result
+        }
+
+    } catch(error){
+        console.error(error);
+
+        return {
+            success: false,
+            pesan: `Tidak dapat terhubung ke FastAPI endpoint ${error}`
+        }
     }
 }
 
