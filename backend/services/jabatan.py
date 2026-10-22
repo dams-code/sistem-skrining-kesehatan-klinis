@@ -2,6 +2,7 @@ from repositories.jabatan import JabatanRepository
 from schemas.jabatan import ResultJabatan, JabatanResponse
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from models.jabatan import Kategori
 
 class JabatanService:
 
@@ -54,3 +55,14 @@ class JabatanService:
             pesan= f"Data Jabatan Id {id} ditemukan",
             data = JabatanResponse.model_validate(get_data_jabatan_id)
         )
+
+    async def list_kategori(self):
+        jabatanRepository = JabatanRepository(self.sesi_db)
+
+        dataKategori = [{"label": data.name, "value": data.value} for data in Kategori]
+
+        return {
+            "status": status.HTTP_200_OK,
+            "pesan": "Data list kategori ditemukan",
+            "data": dataKategori
+        }

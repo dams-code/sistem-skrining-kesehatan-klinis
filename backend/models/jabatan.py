@@ -1,5 +1,5 @@
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from sqlalchemy import String, DateTime, func, Enum as sqlEnum
+from sqlalchemy import String, DateTime, func
 from core.database import Base
 from datetime import datetime
 from enum import Enum
@@ -17,16 +17,16 @@ class NamaJabatan(str, Enum):
 
 class Kategori(str, Enum):
     MEDIS = "Medis"
-    NON_MEDIS = "Non_Medis"
+    NON_MEDIS = "Non Medis"
     
 class Jabatan(Base):
     __tablename__ = "jabatan"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     
-    nama_jabatan: Mapped[NamaJabatan] = mapped_column(sqlEnum(NamaJabatan), nullable=False, index=True)
+    nama_jabatan: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
 
-    kategori: Mapped[Kategori] = mapped_column(sqlEnum(Kategori), default="Non-Medis")
+    kategori: Mapped[str] = mapped_column(String(50), default="Non-Medis")
     user_ref: Mapped["User"] = relationship("User", back_populates="jabatan_ref")
 
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())

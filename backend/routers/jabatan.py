@@ -13,11 +13,18 @@ async def get_jabatan(nama_jabatan: Annotated[str | None, Query()] = None, kateg
 
     return await jabatanService.get_jabatan(nama_jabatan, kategori)
 
+@router_jabatan.get("/list-kategori")
+async def list_kategori(sesi_db: AsyncSession = Depends(get_database)):
+
+    jabatanService = JabatanService(sesi_db)
+
+    return await jabatanService.list_kategori()
+
+
 @router_jabatan.get("/{id}", response_model=ResultJabatan[JabatanResponse])
 async def get_jabatan_id(id: int, sesi_db: AsyncSession = Depends(get_database)):
 
     jabatanService = JabatanService(sesi_db)
 
     return await jabatanService.get_jabatan_id(id)
-
 

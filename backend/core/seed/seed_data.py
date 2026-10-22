@@ -3,13 +3,8 @@ import asyncio
 from pathlib import Path
 from core.database import AsyncLocalSession
 from sqlalchemy import select
-from models.jabatan import Jabatan
-from models.user import User
-from models.paramedis import Paramedis
+from models.jabatan import Jabatan, NamaJabatan, Kategori
 from models.spesialis import Spesialis
-from models.admisi import Admisi
-from models.pasien import Pasien
-from models.klinis import Klinis
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
@@ -39,28 +34,28 @@ async def SeedJabatan():
 
             list_jabatan = [
                 {
-                    "nama_jabatan": "DOKTER_SPESIALIS", 
-                    "kategori": "MEDIS"
+                    "nama_jabatan": NamaJabatan.DOKTER_SPESIALIS, 
+                    "kategori": Kategori.MEDIS
                 },
                 {
-                    "nama_jabatan": "DOKTER_UMUM",
-                    "kategori": "MEDIS"
+                    "nama_jabatan": NamaJabatan.DOKTER_UMUM,
+                    "kategori": Kategori.MEDIS
                 },
                 {
-                    "nama_jabatan": "PERAWAT",
-                    "kategori": "MEDIS"
+                    "nama_jabatan": NamaJabatan.PERAWAT,
+                    "kategori": Kategori.MEDIS
                 },
                 {
-                    "nama_jabatan": "ADMIN",
-                    "kategori": "NON_MEDIS"
+                    "nama_jabatan": NamaJabatan.ADMIN,
+                    "kategori": Kategori.NON_MEDIS
                 },
                 {
-                    "nama_jabatan": "HR",
-                    "kategori": "NON_MEDIS"
+                    "nama_jabatan": NamaJabatan.HR,
+                    "kategori": Kategori.NON_MEDIS
                 },
                 {
-                    "nama_jabatan": "SUPERADMIN",
-                    "kategori": "NON_MEDIS"
+                    "nama_jabatan": NamaJabatan.SUPERADMIN,
+                    "kategori": Kategori.NON_MEDIS
                 }
             ]
 
