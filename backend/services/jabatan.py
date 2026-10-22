@@ -1,8 +1,13 @@
 from repositories.jabatan import JabatanRepository
 from schemas.jabatan import ResultJabatan, JabatanResponse
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from models.jabatan import Kategori
+from models.jabatan import Kategori, NamaJabatan
+from services.user import UserService
+from enum import Enum
+from core.database import get_database
+from fastapi.security import OAuth2PasswordBearer
+from typing import Annotated
 
 class JabatanService:
 
@@ -66,3 +71,29 @@ class JabatanService:
             "pesan": "Data list kategori ditemukan",
             "data": dataKategori
         }
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/login")
+
+def CekJabatan(jabatan: list[NamaJabatan]):
+    
+    async def cekData(token: Annotated[str, Depends(oauth2_scheme)], sesi_db: AsyncSession = Depends(get_database)):
+        
+        userService = UserService(sesi_db)
+
+        jabatan_user = await userService.user_aktif(token)
+        
+        user_data = jabatan_user.data if hasattr(jabatan_user, "data") else jabatan_user
+        nama_jabatan_user = user_data.nama_jabatan
+
+        list_jabatan = [r.value if isinstance(r, Enum) else str(r) for r in jabatan]
+
+        if nama_jabatan_user not in list_jabatan:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Akses ditolak, Halaman ini hanya dapat diakses oleh user dengan jabatan {list_jabatan}"
+            )
+
+        return user_data.username
+
+    return cekData
+

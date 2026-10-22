@@ -34,5 +34,3 @@ class JabatanRepository:
         result = await self.sesi_db.execute(query)
 
         return result.scalar_one_or_none()
-
-
