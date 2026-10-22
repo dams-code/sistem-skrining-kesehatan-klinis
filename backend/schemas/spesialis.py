@@ -11,8 +11,8 @@ class SpesialisResponse(BaseModel):
     nama: str
     created_at: datetime
     created_by: str
-    modify_at: datetime | None
-    modify_by: str | None
+    modify_at: datetime | None=None
+    modify_by: str | None=None
 
     model_config = ConfigDict(from_attributes=True)
 
