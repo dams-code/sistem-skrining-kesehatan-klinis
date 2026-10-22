@@ -38,7 +38,7 @@ export default function MenuUtama() {
                 {sidebarOpen ? <LuArrowLeft size={20} /> : <LuArrowRight size={20} />}
             </button>
 
-            <div className="flex-grow-1 d-flex flex-column overflow-hidden">
+            <div className="flex-grow-1 d-flex flex-column overflow-hidden position-relative">
 
                 <Navbar
                     namaProject = "Sistem Skrining Kesehatan Klinis"
@@ -50,6 +50,10 @@ export default function MenuUtama() {
                     {/* <p>layout form (on-progess)</p> */}
                     {menuAktif === 'jabatan' && <ListJabatan /> }
 
+                </div>
+
+                <div className="p-3 mb-2 position-absolute bottom-0 end-50 rounded-3" style={ sidebarOpen ? {left: '40%', width: 'max-content', backgroundColor: 'rgb(12, 13, 14)'} : {left: '42%', width: 'max-content', backgroundColor: 'rgb(12, 13, 14)'}}>
+                    <p className="text-center fw-light align-content-center text-white fw-semibold">@2026 Damar Djati Wahyu Kemala</p>
                 </div>
             </div>
         </div>
