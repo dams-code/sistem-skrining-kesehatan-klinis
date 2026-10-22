@@ -12,20 +12,20 @@ export const getJabatan = async(params = {}) => {
 
         const response = await fetch(`${Backend_Url}/jabatan${queryString}`);
 
+        const data = await response.json();
+
         if(!response.ok){
             return {
                 success: false,
                 pesan: "Get Data Jabatan Gagal",
-                detail: `Detail error ${response.detail}`
+                detail: `Detail error ${data.detail}`
             }
         };
-
-        const result = await response.json();
 
         return {
             success: true,
             pesan: "Data Jabatan berhasil terload",
-            data: result
+            data: data
         };
 
     } catch(error){
