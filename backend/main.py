@@ -3,6 +3,7 @@ from fastapi import HTTPException, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from routers.user import router_user
 from routers.jabatan import router_jabatan
+from routers.spesialis import router_spesialis
 import models
 
 app = FastAPI()
@@ -20,6 +21,7 @@ async def set_format_json_handler(request: Request, exc: HTTPException):
 
 app.include_router(router_user)
 app.include_router(router_jabatan)
+app.include_router(router_spesialis)
 
 # @app.get("/")
 # async def cek_main():
