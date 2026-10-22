@@ -18,7 +18,7 @@ class SpesialisService:
         if get_data_spesialis is None or len(get_data_spesialis) == 0:
             
             raise HTTPException(
-                status_code=status.HTTP_200_OK,
+                status_code=status.HTTP_404_NOT_FOUND,
                 detail="Data spesialis tidak ditemukan"
             )
 
