@@ -7,6 +7,7 @@ class SpesialisBase(BaseModel):
     nama: str
 
 class SpesialisResponse(BaseModel):
+    id: int
     nama: str
     created_at: datetime
     created_by: str
