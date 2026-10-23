@@ -29,3 +29,10 @@ async def tambah_spesialis(spesialis: SpesialisBase, username_aktif: str = Depen
     spesialisService = SpesialisService(sesi_db)
 
     return await spesialisService.tambah_spesialis(spesialis, username_aktif)
+
+@router_spesialis.put("/{id}", response_model=ResultSpesialis[SpesialisResponse])
+async def update_spesialis(id: int, spesialis: SpesialisBase, username_aktif: str = Depends(CekJabatan([NamaJabatan.HR])), sesi_db: AsyncSession = Depends(get_database)):
+    
+    spesialisService = SpesialisService(sesi_db)
+
+    return await spesialisService.update_spesialis(id, spesialis, username_aktif)

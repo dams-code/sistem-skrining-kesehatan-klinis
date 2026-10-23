@@ -66,3 +66,31 @@ class SpesialisRepository:
             await self.sesi_db.rollback()
             raise e
 
+    async def update_spesialis(self, id: int, spesialis: SpesialisBase, username_aktif: str):
+
+        query = select(Spesialis).wher(Spesialis.id == id)
+
+        result = await self.sesi_db.execute(query)
+
+        result_data_spesialis = result.scalar_one_or_none()
+
+        if result_data_spesialis is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Spesialis dengan id '{id}' tidak ditemukan"
+            )
+        
+        dataSpesialis = spesialis.model_dump(exclude_unset=True)
+
+        for key, item in dataSpesialis.items():
+            setattr(result_data_spesialis, key, item)
+
+        result_data_spesialis.modified_at = datetime.now()
+        result_data_spesialis.modified_by = username_aktif
+
+        await self.sesi_db.commit()
+        await self.sesi_db.refresh(result_data_spesialis)
+
+        return result_data_spesialis
+
+

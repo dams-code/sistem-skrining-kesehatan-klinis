@@ -80,3 +80,27 @@ class SpesialisService:
                 detail=f"Gagal Tambah Data Spesialis, {e}"
             )
 
+    async def update_spesialis(self, id: int, spesialis: SpesialisBase, username_aktif: str) -> ResultSpesialis[SpesialisResponse]:
+
+        try:
+            spesialisRepository = SpesialisRepository(self.sesi_db)
+
+            result_data_spesialis = await spesialisRepository.update_spesialis(id, spesialis, username_aktif)
+
+            if result_data_spesialis is None:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Gagal Edit Data Spesialis"
+                )
+
+            return ResultSpesialis[SpesialisResponse](
+                status=status.HTTP_200_OK,
+                pesan=f"Edit Data Spesialis Berhasil",
+                data=result_data_spesialis
+            )
+
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Gagal Edit Data Spesialis {e}"
+            )
