@@ -18,7 +18,7 @@ export const getJabatan = async(params = {}) => {
             return {
                 success: false,
                 pesan: "Get Data Jabatan Gagal",
-                detail: `Detail error ${data.detail}`
+                detail: `Detail error ${data.pesan}`
             }
         };
 

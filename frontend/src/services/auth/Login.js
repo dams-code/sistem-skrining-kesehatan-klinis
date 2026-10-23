@@ -21,7 +21,7 @@ export const loginUser = async(username, password) => {
             return {
                 success: false,
                 pesan: "Login User Gagal",
-                detail: `Detail Error ${data.detail}`
+                detail: `Detail Error ${data.pesan}`
             };
         }
 

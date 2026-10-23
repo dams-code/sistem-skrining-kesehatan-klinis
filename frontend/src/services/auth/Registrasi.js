@@ -16,7 +16,7 @@ export const registrasiUser = async (DataUser) => {
             return {
                 success: false,
                 pesan: "Registrasi User Gagal",
-                detail: `Detail Error ${data.detail}`
+                detail: `Detail Error ${data.pesan}`
             };
         }
 
