@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {getSpesialis, tambahSpesialis} from '../../services/spesialis/Spesialis';
+import {getSpesialis, tambahSpesialis, editSpesialis, getSpesialisId} from '../../services/spesialis/Spesialis';
 import Swal from 'sweetalert2';
 import { FiEdit, FiPlus, FiSearch, FiTrash2 } from "react-icons/fi";
 import Modal from '../../components/Modal';
@@ -9,50 +9,34 @@ export default function ListSpesialis(){
     const [dataSpesialis, setDataSpesialis] = useState([]);
     const [cariData, setCariData] = useState('');
 
+    const [idSpesialis, setIdSpesialis] = useState('');
     const [namaSpesialis, setNamaSpesialis] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
 
     const getDataSpesialis = async() => {
-        try{
-            const result = await getSpesialis(cariData);
+        const result = await getSpesialis(cariData);
 
-            if(result && !result.success){
-                Swal.fire({
-                    icon: "error",
-                    title: "Gagal get data spesialis",
-                    text: result?.pesan,
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-                setDataSpesialis([]);
-
-                return;
-            }
-
-            setDataSpesialis(result?.data?.data || []);
-
-        } catch(err){
-
-            console.error(err);
-
-            setDataSpesialis([]);
-
+        if(result && !result.success){
             Swal.fire({
                 icon: "error",
                 title: "Gagal get data spesialis",
-                text: err.message,
+                text: result?.pesan,
                 timer: 2000,
                 showConfirmButton: false
             });
+            setDataSpesialis([]);
 
+            return;
         }
+
+        setDataSpesialis(result?.data?.data || []);
     }
 
     useEffect(() => {
         getDataSpesialis();
     }, [cariData])
 
-    const dataNamaSpesialiis = {
+    const dataNamaSpesialis = {
         nama: namaSpesialis
     }
 
@@ -62,7 +46,7 @@ export default function ListSpesialis(){
         setErrorMsg('');
 
         if (namaSpesialis.toString().length > 0 && namaSpesialis !== undefined && namaSpesialis !== null){
-            const result = await tambahSpesialis(dataNamaSpesialiis);
+            const result = await tambahSpesialis(dataNamaSpesialis);
 
             if(result.success){
                 Swal.fire({
@@ -85,6 +69,8 @@ export default function ListSpesialis(){
                     title: "Tambah Data Spesialis Gagal",
                     text: result.pesan
                 });
+
+                return;
             }
         } else {
             setErrorMsg(`Tambah Data Spesialis Gagal, Nama Spesialis Tidak Boleh Kosong`)
@@ -98,6 +84,85 @@ export default function ListSpesialis(){
             return;
         }
 
+    }
+
+    const handleEditSpesialis = async(e) => {
+        e.preventDefault();
+
+        setErrorMsg('');
+        
+        if (namaSpesialis.toString().length > 0 && namaSpesialis !== undefined && namaSpesialis !== null){
+            
+            const result = await editSpesialis(idSpesialis, dataNamaSpesialis);
+
+            if(result.success){
+
+                const modalElement = document.getElementById("EditSpesialis");
+                const modalInstance = bootstrap.Modal.getInstance(modalElement);
+
+                if(modalInstance){
+                    modalInstance.hide();
+                }
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Edit Data Spesialis Berhasil",
+                    text: `Edit Data spesialis ${namaSpesialis} berhasil`,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                setNamaSpesialis('');
+
+                await getDataSpesialis();
+
+            } else {
+                setErrorMsg(`Edit Data Spesialis Gagal, cek kembali data yang diinput ${result.pesan}`)
+                            
+                Swal.fire({
+                    icon: "error",
+                    title: "Edit Data Spesialis Gagal",
+                    text: result.pesan
+                });
+
+                return;
+            }
+        } else {
+            setErrorMsg(`Edit Data Spesialis Gagal, Nama Spesialis Tidak Boleh Kosong`)
+                            
+            Swal.fire({
+                icon: "error",
+                title: "Edit Data Spesialis Gagal",
+                text: `Terjadi Kesalahan Edit Data Spesialis ${result.pesan}`
+            });
+
+            return;
+        }
+
+    }
+
+    const handleGetSpesialisId = async(id) => {
+
+        setErrorMsg('');
+
+        const result = await getSpesialisId(id);
+
+        if(result && result.success){
+            setIdSpesialis(result?.data?.data.id || null);
+            setNamaSpesialis(result?.data?.data.nama || "");
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Get Data Spesialis Gagal",
+                text: result.pesan,
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+                        console.error(result);
+        }
+
+        
     }
 
     return (
@@ -124,7 +189,7 @@ export default function ListSpesialis(){
                     />
                 </div>
 
-                <button className="btn btn-sm btn-primary d-flex align-items-center gap-1 px-3 shadow-none fw-medium" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                <button className="btn btn-sm btn-primary d-flex align-items-center gap-1 px-3 shadow-none fw-medium" data-bs-toggle="modal" data-bs-target="#TambahSpesialis">
                     <FiPlus size={16}/>
                     <span>Tambah Spesialis</span>
                 </button>
@@ -153,7 +218,7 @@ export default function ListSpesialis(){
                                     </td>
                                     <td className="px-3 py-1 text-center">
                                         <div className="d-flex justify-content-center gap-2">
-                                            <button className="btn btn-sm btn-outline-primary border-0 bg-primary bg-opacity-10 text-primary p-2 rounded-2 d-flex align-items-center justify-content-center shadow-none">
+                                            <button className="btn btn-sm btn-outline-primary border-0 bg-primary bg-opacity-10 text-primary p-2 rounded-2 d-flex align-items-center justify-content-center shadow-none" data-bs-toggle="modal" data-bs-target="#EditSpesialis" onClick={() => handleGetSpesialisId(spesialis.id)}>
                                                 <FiEdit size={15}/>
                                             </button>
 
@@ -176,11 +241,10 @@ export default function ListSpesialis(){
                 </table>
             </div>
 
-
-            <Modal id="staticBackdrop" judul="Tambah Data Spesialis">
+            <Modal id="TambahSpesialis" judul="Tambah Data Spesialis">
                 <form onSubmit={handleTambahSpesialis}>
                      <div className="mb-3 text-start">
-                        <label className="form-label">Nama Spesialis</label>
+                        <label className="form-label fw-semibold">Nama Spesialis</label>
                         <input type="text" className="form-control" value={namaSpesialis} onChange={(e) => setNamaSpesialis(e.target.value)} />
                     </div>
 
@@ -191,6 +255,28 @@ export default function ListSpesialis(){
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         <button type="Submit" className="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </Modal>
+
+            <Modal id="EditSpesialis" judul="Edit Data Spesialis">
+                <form onSubmit={handleEditSpesialis}>
+                    <div className="mb-3 text-start">
+                        <label className="form-label fw-semibold">Id Spesialis</label>
+                        <input type="text" style={{width: '70px'}} className="fw-semibold text-center form-control" value={idSpesialis} onChange={(e) => setIdSpesialis(e.target.value)} readOnly disabled="True" />
+                    </div>
+                    <div className="mb-3 text-start">
+                        <label className="form-label fw-semibold">Nama Spesialis</label>
+                        <input type="text" className="form-control" value={namaSpesialis} onChange={(e) => setNamaSpesialis(e.target.value)} />
+                    </div>
+
+                    {errorMsg && (
+                        <p style={{color: '#ef4444', fontSize: '13px', textAlign: 'center', marginTop: '14px', lineHeight: '1.4'}}>{errorMsg}</p>
+                    )}
+
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="Submit" className="btn btn-primary">Update</button>
                     </div>
                 </form>
             </Modal>

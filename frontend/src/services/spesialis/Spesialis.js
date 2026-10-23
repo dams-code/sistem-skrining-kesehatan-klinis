@@ -19,7 +19,7 @@ export const getSpesialis = async (nama) => {
             return {
                 success: false,
                 pesan: "Gagal load data spesialis",
-                detail: `Detail error ${data.detail}`
+                detail: `Detail error ${data.pesan}`
             }
         }
 
@@ -42,7 +42,6 @@ export const getSpesialis = async (nama) => {
 export const tambahSpesialis = async(dataNama) => {
 
     try{
-
         const response = await cek_auth_token(`${Backend_Url}/spesialis`, {
             method: "POST",
             body: JSON.stringify(dataNama)
@@ -54,7 +53,7 @@ export const tambahSpesialis = async(dataNama) => {
             return {
                 success: false,
                 pesan: "Akses ditolak, Anda tidak memiliki hak akses (HR) untuk menambah atau mengubah data spesialis ini.",
-                detail: `Detail error ${data.detail}`
+                detail: `Detail error ${data.pesan}`
             }
 
         } else if(!response.ok){
@@ -80,4 +79,77 @@ export const tambahSpesialis = async(dataNama) => {
             pesan: `Tidak dapat terhubung ke FastAPI endpoint ${error}`
         };
     }
+}
+
+export const getSpesialisId = async(id) =>{
+    
+    try{
+        const response = await fetch(`${Backend_Url}/spesialis/${id}`);
+
+        const data = await response.json();
+
+        if(!response.ok){
+            
+            return {
+                success: false,
+                pesan: `Gagal tambah data spesialis, ${data.pesan}`
+            }
+        }
+
+        return {
+            success: true,
+            pesan: `Data spesialis Id ${id} berhasil ter-load`,
+            data: data
+        }
+
+    } catch(error){
+        console.error(error);
+
+        return {
+            success: false,
+            pesan: `Tidak dapat terhubung ke FastAPI endpoint ${error}`
+        };
+    }
+}
+
+export const editSpesialis = async(id, dataNama) => {
+
+    try{
+        const response = await cek_auth_token(`${Backend_Url}/spesialis/${id}`, {
+            method: "PUT",
+            body: JSON.stringify(dataNama)
+        });
+
+        const data = await response.json();
+
+        if(!response.ok && response.status === 403){
+            return {
+                success: false,
+                pesan: "Akses ditolak, Anda tidak memiliki hak akses (HR) untuk menambah atau mengubah data spesialis ini.",
+                detail: `Detail error ${data.pesan}`
+            }
+
+        } else if(!response.ok){
+            
+            return {
+                success: false,
+                pesan: `Gagal tambah data spesialis, ${data.pesan}`
+            }
+        }
+
+        return {
+            success: true,
+            pesan: "Edit Spesialis berhasil",
+            data: data
+        }
+
+    } catch(error){
+        console.error(error);
+
+        return {
+            success: false,
+            pesan: `Tidak dapat terhubung ke FastAPI endpoint ${error}`
+        };
+    }
+
 }
