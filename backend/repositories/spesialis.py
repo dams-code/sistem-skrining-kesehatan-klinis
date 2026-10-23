@@ -68,7 +68,7 @@ class SpesialisRepository:
 
     async def update_spesialis(self, id: int, spesialis: SpesialisBase, username_aktif: str):
 
-        query = select(Spesialis).wher(Spesialis.id == id)
+        query = select(Spesialis).where(Spesialis.id == id)
 
         result = await self.sesi_db.execute(query)
 
