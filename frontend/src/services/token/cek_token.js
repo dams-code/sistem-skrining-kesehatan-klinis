@@ -14,11 +14,11 @@ export const cek_auth_token = async (url, options={}) => {
     try{
         const response = await fetch(url, options);
 
-        if(response.status === 403){
-            window.location.replace("/403.html");
-            return null;
+        // if(response.status === 403){
+        //     window.location.replace("/403.html");
+        //     return null;
 
-        }
+        // }
 
         if(response.status === 401){
             localStorage.removeItem("access_token");

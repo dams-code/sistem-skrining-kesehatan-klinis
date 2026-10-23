@@ -1,51 +1,104 @@
 import { useEffect, useState } from "react";
-import {getSpesialis} from '../../services/spesialis/Spesialis';
+import {getSpesialis, tambahSpesialis} from '../../services/spesialis/Spesialis';
 import Swal from 'sweetalert2';
 import { FiEdit, FiPlus, FiSearch, FiTrash2 } from "react-icons/fi";
+import Modal from '../../components/Modal';
 
 export default function ListSpesialis(){
 
     const [dataSpesialis, setDataSpesialis] = useState([]);
     const [cariData, setCariData] = useState('');
 
-    useEffect(() => {
-        const getDataSpesialis = async() => {
-            try{
-                const result = await getSpesialis(cariData);
+    const [namaSpesialis, setNamaSpesialis] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
 
-                if(result && !result.success){
-                    Swal.fire({
-                        icon: "error",
-                        title: "Gagal get data spesialis",
-                        text: result?.pesan,
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
-                    setDataSpesialis([]);
+    const getDataSpesialis = async() => {
+        try{
+            const result = await getSpesialis(cariData);
 
-                    return;
-                }
-
-                setDataSpesialis(result?.data?.data || []);
-
-            } catch(err){
-                console.error(err);
-
-                setDataSpesialis([]);
-
+            if(result && !result.success){
                 Swal.fire({
                     icon: "error",
                     title: "Gagal get data spesialis",
-                    text: err.message,
+                    text: result?.pesan,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                setDataSpesialis([]);
+
+                return;
+            }
+
+            setDataSpesialis(result?.data?.data || []);
+
+        } catch(err){
+
+            console.error(err);
+
+            setDataSpesialis([]);
+
+            Swal.fire({
+                icon: "error",
+                title: "Gagal get data spesialis",
+                text: err.message,
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+        }
+    }
+
+    useEffect(() => {
+        getDataSpesialis();
+    }, [cariData])
+
+    const dataNamaSpesialiis = {
+        nama: namaSpesialis
+    }
+
+    const handleTambahSpesialis = async(e) => {
+        e.preventDefault();
+
+        setErrorMsg('');
+
+        if (namaSpesialis.toString().length > 0 && namaSpesialis !== undefined && namaSpesialis !== null){
+            const result = await tambahSpesialis(dataNamaSpesialiis);
+
+            if(result.success){
+                Swal.fire({
+                    icon: "success",
+                    title: "Tambah Data Spesialis Berhasil",
+                    text: `Data spesialis ${namaSpesialis} berhasil ditambahkan`,
                     timer: 2000,
                     showConfirmButton: false
                 });
 
+                setNamaSpesialis('');
+
+                await getDataSpesialis();
+
+            } else {
+                setErrorMsg(`Tambah Data Spesialis Gagal, cek kembali data yang diinput ${result.pesan}`)
+                            
+                Swal.fire({
+                    icon: "error",
+                    title: "Tambah Data Spesialis Gagal",
+                    text: result.pesan
+                });
             }
+        } else {
+            setErrorMsg(`Tambah Data Spesialis Gagal, Nama Spesialis Tidak Boleh Kosong`)
+                            
+            Swal.fire({
+                icon: "error",
+                title: "Tambah Data Spesialis Gagal",
+                text: `Terjadi Kesalahan Tambah Data Spesialis ${result.pesan}`
+            });
+
+            return;
         }
 
-        getDataSpesialis();
-    }, [cariData])
+    }
 
     return (
         <div className="card border-0 shadow-sm rounded-4 p-4 bg-white">
@@ -122,6 +175,25 @@ export default function ListSpesialis(){
                 </tbody>
                 </table>
             </div>
+
+
+            <Modal id="staticBackdrop" judul="Tambah Data Spesialis">
+                <form onSubmit={handleTambahSpesialis}>
+                     <div className="mb-3 text-start">
+                        <label className="form-label">Nama Spesialis</label>
+                        <input type="text" className="form-control" value={namaSpesialis} onChange={(e) => setNamaSpesialis(e.target.value)} />
+                    </div>
+
+                    {errorMsg && (
+                        <p style={{color: '#ef4444', fontSize: '13px', textAlign: 'center', marginTop: '14px', lineHeight: '1.4'}}>{errorMsg}</p>
+                    )}
+
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="Submit" className="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </Modal>
         </div>
     )
 }
