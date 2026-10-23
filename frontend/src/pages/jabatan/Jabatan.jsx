@@ -7,43 +7,31 @@ export default function ListJabatan(){
     const [dataJabatan, setDataJabatan] = useState([]);
     const [cariData, setCariData] = useState('');
 
+    const getDataJabatan = async() => {
+        const result = await getJabatan({
+            nama_jabatan: cariData,
+            kategori: cariData
+        });
+
+        if(result && !result.success){
+            Swal.fire({
+                icon: "error",
+                title: "Gagal get data jabatan",
+                text: result?.pesan,
+                timer: 2000,
+                showConfirmButton: false
+            });
+            setDataJabatan([]);
+
+            return;
+        }
+
+        setDataJabatan(result?.data?.data || []);
+    }
+
     useEffect(() => {
-       const getDataJabatan = async() => {
-            try{
-                
-                const result = await getJabatan({
-                    nama_jabatan: cariData,
-                    kategori: cariData
-                });
 
-                if(result && !result.success){
-                    Swal.fire({
-                        icon: "error",
-                        title: "Gagal get data jabatan",
-                        text: result?.pesan,
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
-                    setDataJabatan([]);
-
-                    return;
-                }
-
-                setDataJabatan(result?.data?.data || []);
-            } catch(err){
-                console.error(`Gagal get data jabatan, ${err}`);
-                setDataJabatan([]);
-                Swal.fire({
-                    icon: "error",
-                    title: "Gagal get data jabatan",
-                    text: err.message,
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            }
-       }
-
-       getDataJabatan();
+        getDataJabatan();
     }, [cariData]);
 
     return (
