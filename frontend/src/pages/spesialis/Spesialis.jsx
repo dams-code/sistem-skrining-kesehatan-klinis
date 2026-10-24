@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {getSpesialis, tambahSpesialis, editSpesialis, getSpesialisId} from '../../services/spesialis/Spesialis';
 import Swal from 'sweetalert2';
-import { FiEdit, FiPlus, FiSearch, FiTrash2 } from "react-icons/fi";
+import { FiEdit, FiPlus, FiSearch } from "react-icons/fi";
 import Modal from '../../components/Modal';
 
 export default function ListSpesialis(){
@@ -24,6 +24,7 @@ export default function ListSpesialis(){
                 timer: 2000,
                 showConfirmButton: false
             });
+            
             setDataSpesialis([]);
 
             return;
@@ -220,10 +221,6 @@ export default function ListSpesialis(){
                                         <div className="d-flex justify-content-center gap-2">
                                             <button className="btn btn-sm btn-outline-primary border-0 bg-primary bg-opacity-10 text-primary p-2 rounded-2 d-flex align-items-center justify-content-center shadow-none" data-bs-toggle="modal" data-bs-target="#EditSpesialis" onClick={() => handleGetSpesialisId(spesialis.id)}>
                                                 <FiEdit size={15}/>
-                                            </button>
-
-                                            <button className="btn btn-sm btn-outline-danger border-0 bg-danger bg-opacity-10 text-danger p-2 rounded-2 d-flex align-items-center justify-content-center shadow-none">
-                                                <FiTrash2 size={15}/>
                                             </button>
                                         </div>
                                     </td>

@@ -1,3 +1,5 @@
+import { cek_auth_token } from "../token/cek_token";
+
 const Backend_Url = import.meta.env.VITE_URL_Backend;
 
 export const getJabatan = async(params = {}) => {
@@ -10,17 +12,24 @@ export const getJabatan = async(params = {}) => {
 
         const queryString = parameterQuery.toString() ? `?${parameterQuery.toString()}`: '';
 
-        const response = await fetch(`${Backend_Url}/jabatan${queryString}`);
+        const response = await cek_auth_token(`${Backend_Url}/jabatan${queryString}`);
 
         const data = await response.json();
 
-        if(!response.ok){
+        if(!response.ok && response.status === 403){
             return {
                 success: false,
-                pesan: "Get Data Jabatan Gagal",
+                pesan: "Akses ditolak, Anda tidak memiliki hak akses (HR dan Super Admin) untuk melihat, menambah atau mengubah data Jabatan ini.",
                 detail: `Detail error ${data.pesan}`
             }
-        };
+
+        } else if(!response.ok){
+            
+            return {
+                success: false,
+                pesan: `Gagal Get Data Jabatan, ${data.pesan}`
+            }
+        }
 
         return {
             success: true,
@@ -41,14 +50,20 @@ export const getJabatan = async(params = {}) => {
 export const getListKategori = async() => {
     try{
 
-        const response = await fetch(`${Backend_Url}/jabatan/list-kategori`);
+        const response = await cek_auth_token(`${Backend_Url}/jabatan/list-kategori`);
 
-        if(!response.ok){
-
+        if(!response.ok && response.status === 403){
             return {
                 success: false,
-                pesan: "Get list kategori gagal",
-                detail: `Detail Error ${response.detail}`
+                pesan: "Akses ditolak, Anda tidak memiliki hak akses (HR dan Super Admin) untuk melihat, menambah atau mengubah data Jabatan ini.",
+                detail: `Detail error ${data.pesan}`
+            }
+
+        } else if(!response.ok){
+            
+            return {
+                success: false,
+                pesan: `Gagal Get list kategori, ${data.pesan}`
             }
         }
 

@@ -11,15 +11,23 @@ export const getSpesialis = async (nama) => {
 
         const queryString = parameterQuery.toString() ? `?${parameterQuery.toString()}`: '';
 
-        const response = await fetch(`${Backend_Url}/spesialis${queryString}`);
+        const response = await cek_auth_token(`${Backend_Url}/spesialis${queryString}`);
 
         const data = await response.json();
 
-        if(!response.ok){
+        if(!response.ok && response.status === 403){
             return {
                 success: false,
-                pesan: "Gagal load data spesialis",
+                pesan: "Akses ditolak, Anda tidak memiliki hak akses (HR dan Super Admin) untuk melihat, menambah atau mengubah data spesialis ini.",
                 detail: `Detail error ${data.pesan}`
+            }
+
+        } else if(!response.ok){
+            console.error(data);
+            
+            return {
+                success: false,
+                pesan: `Gagal load data spesialis, ${data.pesan}`
             }
         }
 
@@ -52,7 +60,7 @@ export const tambahSpesialis = async(dataNama) => {
         if(!response.ok && response.status === 403){
             return {
                 success: false,
-                pesan: "Akses ditolak, Anda tidak memiliki hak akses (HR) untuk menambah atau mengubah data spesialis ini.",
+                pesan: "Akses ditolak, Anda tidak memiliki hak akses (HR dan Super Admin) untuk melihat, menambah atau mengubah data spesialis ini.",
                 detail: `Detail error ${data.pesan}`
             }
 
@@ -84,15 +92,23 @@ export const tambahSpesialis = async(dataNama) => {
 export const getSpesialisId = async(id) =>{
     
     try{
-        const response = await fetch(`${Backend_Url}/spesialis/${id}`);
+        const response = await cek_auth_token(`${Backend_Url}/spesialis/${id}`);
 
         const data = await response.json();
 
-        if(!response.ok){
+        if(!response.ok && response.status === 403){
+            return {
+                success: false,
+                pesan: "Akses ditolak, Anda tidak memiliki hak akses (HR dan Super Admin) untuk melihat, menambah atau mengubah data spesialis ini.",
+                detail: `Detail error ${data.pesan}`
+            }
+
+        } else if(!response.ok){
+            console.error(data);
             
             return {
                 success: false,
-                pesan: `Gagal tambah data spesialis, ${data.pesan}`
+                pesan: `Gagal load data spesialis, ${data.pesan}`
             }
         }
 
@@ -125,7 +141,7 @@ export const editSpesialis = async(id, dataNama) => {
         if(!response.ok && response.status === 403){
             return {
                 success: false,
-                pesan: "Akses ditolak, Anda tidak memiliki hak akses (HR) untuk menambah atau mengubah data spesialis ini.",
+                pesan: "Akses ditolak, Anda tidak memiliki hak akses (HR dan Super Admin) untuk melihat, menambah atau mengubah data spesialis ini.",
                 detail: `Detail error ${data.pesan}`
             }
 
